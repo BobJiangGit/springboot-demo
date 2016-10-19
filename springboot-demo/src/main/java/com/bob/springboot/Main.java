@@ -1,4 +1,4 @@
-package com.bob.springboot.demo;
+package com.bob.springboot;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Created by Bob Jiang on 2016/10/11.
  */
-@SpringBootApplication
 @RestController
 @RequestMapping("/demo")
+@SpringBootApplication
 public class Main {
 
     @RequestMapping("/index")
