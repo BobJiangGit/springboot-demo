@@ -1,6 +1,5 @@
 package com.bob.base.mapper;
 
-import java.util.List;
 
 /**
  * Created by Bob Jiang on 2016/10/12.

@@ -10,9 +10,10 @@ import java.util.List;
  */
 public interface SelectMapper<T> {
 
-    @SelectProvider(type = BaseSelectProvider.class, method = "dynamicSQL")
+//    @SelectProvider(type = BaseSelectProvider.class, method = "getById")
     T getById(Integer id);
 
+//    @SelectProvider(type = BaseSelectProvider.class, method = "findAll")
     List<T> findAll(T t);
 
     List<T> findPageList(T t);

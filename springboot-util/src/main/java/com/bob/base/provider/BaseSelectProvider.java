@@ -7,10 +7,20 @@ import org.apache.ibatis.mapping.MappedStatement;
  */
 public class BaseSelectProvider {
 
-    public String getById(MappedStatement ms) {
+    public String getById(Integer id) {
         StringBuffer sql = new StringBuffer();
         sql.append("select");
-        System.out.println(ms.getId());
         return null;
+    }
+
+    public String findAll() {
+        StringBuffer sql = new StringBuffer();
+        sql.append("select");
+//        System.out.println("============================================" + ms.getId());
+        return null;
+    }
+
+    public String dynamicSQL(Object record) {
+        return "dynamicSQL";
     }
 }
