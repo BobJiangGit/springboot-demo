@@ -1,4 +1,4 @@
-package com.bob.springboot.city.conf;
+package com.bob.springboot.conf;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -21,7 +21,7 @@ import javax.sql.DataSource;
  *
  */
 @Configuration
-@MapperScan("com.bob.springboot.city.mapper")
+@MapperScan("com.bob.springboot.*.mapper")
 @EnableTransactionManagement
 public class MyBatisConfig implements TransactionManagementConfigurer {
 
@@ -35,7 +35,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
     public SqlSessionFactory sqlSessionFactoryBean() {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource());
-        bean.setTypeAliasesPackage("com.bob.springboot.city.model");
+        bean.setTypeAliasesPackage("com.bob.springboot.*.model");
 
 //        //分页插件
 //        PageHelper pageHelper = new PageHelper();
