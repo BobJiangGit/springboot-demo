@@ -6,8 +6,6 @@ import com.bob.springboot.city.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -22,11 +20,5 @@ public class CityServiceImpl implements CityService {
     @Override
     public List<City> findCityList() {
         return cityMapper.findAll(null);
-//        Iterable<City> iterable = cityMapper.findAll();
-//        Iterator<City> iterator = iterable.iterator();
-//        List<City> list = new ArrayList<City>();
-//        while (iterator.hasNext())
-//            list.add(iterator.next());
-//        return list;
     }
 }
