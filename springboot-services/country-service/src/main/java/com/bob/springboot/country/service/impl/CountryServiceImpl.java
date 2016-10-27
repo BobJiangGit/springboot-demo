@@ -2,7 +2,7 @@ package com.bob.springboot.country.service.impl;
 
 import com.bob.springboot.country.mapper.CountryMapper;
 import com.bob.springboot.country.model.Country;
-import com.bob.springboot.country.search.ESSearchComponent;
+import com.bob.springboot.country.search.SearchComponent;
 import com.bob.springboot.country.search.constants.SearchConstants;
 import com.bob.springboot.country.search.model.SearchField;
 import com.bob.springboot.country.search.model.SearchRequest;
@@ -23,7 +23,7 @@ public class CountryServiceImpl implements CountryService {
     private CountryMapper countryMapper;
 
     @Autowired
-    private ESSearchComponent searchComponent;
+    private SearchComponent searchComponent;
 
     @Override
     public List<Country> searchCountryList(Country country) {

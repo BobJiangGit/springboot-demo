@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * Created by Bob Jiang on 2016/10/27.
  */
 @Component
-public class ESIndexComponent {
+public class IndexComponent {
 
     @Autowired
     private ESProp esProp;

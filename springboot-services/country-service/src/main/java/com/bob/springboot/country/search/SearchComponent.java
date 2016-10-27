@@ -28,7 +28,7 @@ import java.util.Map;
  * Created by Bob Jiang on 2016/10/27.
  */
 @Component
-public class ESSearchComponent {
+public class SearchComponent {
 
 //    INSTANCE;
 
