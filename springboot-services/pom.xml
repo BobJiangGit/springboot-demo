@@ -16,6 +16,7 @@
 
     <modules>
         <module>city-service</module>
+        <module>country-service</module>
     </modules>
 
 </project>
