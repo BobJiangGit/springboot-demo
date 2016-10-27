@@ -15,7 +15,6 @@ import org.elasticsearch.common.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.TermQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,7 +28,7 @@ import java.util.Map;
  * Created by Bob Jiang on 2016/10/27.
  */
 @Component
-public class ESComponent {
+public class ESSearchComponent {
 
 //    INSTANCE;
 

@@ -2,13 +2,11 @@ package com.bob.springboot.country.service.impl;
 
 import com.bob.springboot.country.mapper.CountryMapper;
 import com.bob.springboot.country.model.Country;
-import com.bob.springboot.country.search.ESComponent;
+import com.bob.springboot.country.search.ESSearchComponent;
 import com.bob.springboot.country.search.constants.SearchConstants;
-import com.bob.springboot.country.search.model.ESOrder;
 import com.bob.springboot.country.search.model.SearchField;
 import com.bob.springboot.country.search.model.SearchRequest;
 import com.bob.springboot.country.service.CountryService;
-import io.searchbox.client.JestClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +23,7 @@ public class CountryServiceImpl implements CountryService {
     private CountryMapper countryMapper;
 
     @Autowired
-    private ESComponent esComponent;
+    private ESSearchComponent searchComponent;
 
     @Override
     public List<Country> searchCountryList(Country country) {
@@ -39,7 +37,7 @@ public class CountryServiceImpl implements CountryService {
 //        request.setOrder(new ArrayList<ESOrder>(){{
 //            add(new ESOrder("countryname"));
 //        }});
-        return esComponent.searchList(request, Country.class);
+        return searchComponent.searchList(request, Country.class);
     }
 
     @Override
