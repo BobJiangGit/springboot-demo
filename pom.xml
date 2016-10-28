@@ -18,8 +18,8 @@
 
     <modules>
         <module>springboot-util</module>
-        <module>springboot-demo</module>
-        <module>springboot-services</module>
+        <module>springboot-simple</module>
+        <module>springboot-search</module>
     </modules>
 
 </project>
