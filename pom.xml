@@ -16,10 +16,15 @@
         <relativePath/>
     </parent>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+    </properties>
+
     <modules>
-        <module>springboot-util</module>
-        <module>springboot-simple</module>
+        <module>springboot-mapper</module>
         <module>springboot-search</module>
+        <module>springboot-simple</module>
     </modules>
 
 </project>
