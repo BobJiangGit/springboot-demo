@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bob.springboot.mapper.CityMapper">
+
+    <resultMap id="resultMap" type="com.bob.springboot.model.City">
+        <id property="id" column="id" jdbcType="INTEGER"/>
+        <id property="name" column="name" jdbcType="VARCHAR"/>
+        <id property="state" column="state" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="findAll" parameterType="com.bob.springboot.model.City" resultMap="resultMap">
+        select id, name, state from city
+    </select>
+</mapper>
