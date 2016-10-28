@@ -36,4 +36,12 @@ public class ESOrder {
     public void setSort(SortOrder sort) {
         this.sort = sort;
     }
+
+    @Override
+    public String toString() {
+        return "ESOrder{" +
+                "name='" + name + '\'' +
+                ", sort=" + sort +
+                '}';
+    }
 }

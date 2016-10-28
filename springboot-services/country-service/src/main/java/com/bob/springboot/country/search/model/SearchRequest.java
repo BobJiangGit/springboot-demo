@@ -64,4 +64,16 @@ public class SearchRequest implements Serializable {
     public void setIndexType(String indexType) {
         this.indexType = indexType;
     }
+
+    @Override
+    public String toString() {
+        return "SearchRequest{" +
+                "searchField=" + searchField +
+                ", order=" + order +
+                ", indexName='" + indexName + '\'' +
+                ", indexType='" + indexType + '\'' +
+                ", pageNo=" + pageNo +
+                ", pageSize=" + pageSize +
+                '}';
+    }
 }

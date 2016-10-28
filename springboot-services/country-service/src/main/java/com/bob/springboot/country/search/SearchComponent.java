@@ -69,7 +69,7 @@ public class SearchComponent {
                     request.getIndexType(), from, request.getPageSize());
             jestClient = getJestClient();
             result = jestClient.execute(search);
-        } catch (IOException e) {
+        } catch (Exception e) {
             result = null;
             e.printStackTrace();
         }
@@ -78,19 +78,21 @@ public class SearchComponent {
 
     public <T> List<T> searchList(SearchRequest request, Class<T> clazz) {
         JestResult result = search(request);
-        return result.getSourceAsObjectList(clazz);
+        return (result != null) ? result.getSourceAsObjectList(clazz) : null;
     }
 
     public <T> Map<String, Object> searchMap(SearchRequest request, Class<T> clazz) {
         Map<String, Object> map = Maps.newHashMap();
         JestResult result = search(request);
-        List<T> list = result.getSourceAsObjectList(clazz);
-        map.put("list", list);
-        Map hitsMap = (Map) result.getValue("hits");
-        if(!CollectionUtils.isEmpty(hitsMap)){
-            if (hitsMap.get("total") != null) {
-                Number total = (Number) hitsMap.get("total");
-                map.put("total", total.intValue());
+        if (result != null) {
+            List<T> list = result.getSourceAsObjectList(clazz);
+            map.put("list", list);
+            Map hitsMap = (Map) result.getValue("hits");
+            if (!CollectionUtils.isEmpty(hitsMap)) {
+                if (hitsMap.get("total") != null) {
+                    Number total = (Number) hitsMap.get("total");
+                    map.put("total", total.intValue());
+                }
             }
         }
         return map;
@@ -104,8 +106,7 @@ public class SearchComponent {
         if (!CollectionUtils.isEmpty(fields)) {
             for (SearchField field : fields) {
                 QueryBuilder queryBuilder = null;
-
-                if (field.getValue() != null || StringUtils.isNotBlank(field.getValue().toString())) {
+                if (field.getValue() != null && StringUtils.isNotBlank(field.getValue().toString())) {
                     if (SearchField.Type.String.equals(field.getType())) {
                         queryBuilder = QueryBuilders.queryStringQuery(field.getValue().toString())
                                 .defaultField(field.getFieldName());

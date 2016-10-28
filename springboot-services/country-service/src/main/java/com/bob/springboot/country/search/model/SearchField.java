@@ -78,4 +78,15 @@ public class SearchField {
     public void setClause(Clause clause) {
         this.clause = clause;
     }
+
+    @Override
+    public String toString() {
+        return "SearchField{" +
+                "fieldName='" + fieldName + '\'' +
+                ", value=" + value +
+                ", clause=" + clause +
+                ", type=" + type +
+                ", matchAll=" + matchAll +
+                '}';
+    }
 }
