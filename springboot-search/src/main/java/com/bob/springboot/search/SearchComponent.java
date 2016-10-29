@@ -1,5 +1,6 @@
 package com.bob.springboot.search;
 
+import com.bob.springboot.search.constants.SearchConstants;
 import com.bob.springboot.search.enums.Clause;
 import com.bob.springboot.search.model.SearchOrder;
 import com.bob.springboot.search.model.SearchField;
@@ -8,13 +9,11 @@ import com.google.common.collect.Maps;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Search;
-import org.elasticsearch.common.lang3.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -26,31 +25,32 @@ public enum SearchComponent {
 
     INSTANCE;
 
-    private static Logger log = LoggerFactory.getLogger(SearchComponent.class);
-
     private ClientComponent clientComponent = ClientComponent.INSTANCE;
 
     public Search getSearch(SearchSourceBuilder searchSourceBuilder,
             String indexName, List<String> indexType, Integer from, Integer size) {
         Search.Builder builder = new Search.Builder(searchSourceBuilder.from(from).size(size).toString());
         builder.addIndex(indexName);
-        if (indexType != null && indexType.size() > 0)
-            builder.addType(indexType);
+        builder.addType(indexType);
         return builder.build();
     }
 
     public JestResult search(SearchRequest request) {
+        SearchSourceBuilder searchSourceBuilder = buildSearchBuilder(request);
+        Integer from = (request.getPageNo() - 1) * request.getPageSize();
+        Search search = getSearch(searchSourceBuilder, request.getIndexName(),
+                request.getIndexType(), from, request.getPageSize());
+        return executeSearch(search);
+    }
+
+    public JestResult executeSearch(Search search) {
         try {
-            SearchSourceBuilder searchSourceBuilder = buildSearchBuilder(request);
-            Integer from = (request.getPageNo() - 1) * request.getPageSize();
-            Search search = getSearch(searchSourceBuilder, request.getIndexName(),
-                    request.getIndexType(), from, request.getPageSize());
             JestClient jestClient = clientComponent.getJestClient();
             JestResult result = jestClient.execute(search);
             return result;
         } catch (Exception e) {
-            log.error("search exception", e);
-            return null;
+            throw new RuntimeException("SearchComponent search failed! msg: "
+                    + e.getMessage(), e);
         }
     }
 
@@ -64,12 +64,12 @@ public enum SearchComponent {
         JestResult result = search(request);
         if (result != null) {
             List<T> list = result.getSourceAsObjectList(clazz);
-            map.put("result", list);
-            Map hitsMap = (Map) result.getValue("hits");
+            map.put(SearchConstants.SEARCH_RESULT_MAPKEY, list);
+            Map hitsMap = (Map) result.getValue(SearchConstants.SEARCH_RESULT_HITS);
             if (hitsMap != null && hitsMap.size() > 0) {
-                if (hitsMap.get("total") != null) {
-                    Number total = (Number) hitsMap.get("total");
-                    map.put("total", total.intValue());
+                if (hitsMap.get(SearchConstants.SEARCH_RESULT_TOTAL) != null) {
+                    Number total = (Number) hitsMap.get(SearchConstants.SEARCH_RESULT_TOTAL);
+                    map.put(SearchConstants.SEARCH_RESULT_TOTAL, total.intValue());
                 }
             }
         }
@@ -80,28 +80,28 @@ public enum SearchComponent {
         SearchSourceBuilder builder = new SearchSourceBuilder();
         BoolQueryBuilder query = QueryBuilders.boolQuery();
 
-        List<SearchField> fields = request.getSearchField();
-        if (fields != null && fields.size() > 0) {
-            for (SearchField field : fields) {
-                QueryBuilder queryBuilder = null;
-                if (field.getValue() != null && StringUtils.isNotBlank(field.getValue().toString())) {
-                    if (SearchField.Type.String.equals(field.getType())) {
-                        queryBuilder = QueryBuilders.queryStringQuery(field.getValue().toString())
-                                .defaultField(field.getFieldName());
-                    } else {
-                        queryBuilder = QueryBuilders.termQuery(field.getFieldName(), field.getValue());
-                    }
-                } else
-                    if (field.getMatchAll())
-                        queryBuilder = QueryBuilders.matchAllQuery();
+        List<SearchField> fields = request.getField();
+        if (fields == null || fields.size() == 0)
+            throw new RuntimeException("searchField can't be null");
+        for (SearchField field : fields) {
+            QueryBuilder queryBuilder = null;
+            if (field.getValue() != null && StringUtils.isNotBlank(field.getValue().toString())) {
+                if (SearchField.Type.String.equals(field.getType())) {
+                    queryBuilder = QueryBuilders.queryStringQuery(field.getValue().toString())
+                            .defaultField(field.getFieldName());
+                } else {
+                    queryBuilder = QueryBuilders.termQuery(field.getFieldName(), field.getValue());
+                }
+            } else
+                if (field.getMatchAll())
+                    queryBuilder = QueryBuilders.matchAllQuery();
 
-                if (Clause.should.equals(field.getClause()))
-                    query.should(queryBuilder);
-                if (Clause.must.equals(field.getClause()))
-                    query.must(queryBuilder);
-                if (Clause.mustNot.equals(field.getClause()))
-                    query.mustNot(queryBuilder);
-            }
+            if (Clause.should.equals(field.getClause()))
+                query.should(queryBuilder);
+            if (Clause.must.equals(field.getClause()))
+                query.must(queryBuilder);
+            if (Clause.mustNot.equals(field.getClause()))
+                query.mustNot(queryBuilder);
         }
 
         List<SearchOrder> orderList = request.getOrder();

@@ -1,6 +1,9 @@
 package com.bob.springboot.search.model;
 
+import com.bob.springboot.search.constants.SearchConstants;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,19 +13,19 @@ public class SearchRequest implements Serializable {
 
     private static final long serialVersionUID = -1775272965412280972L;
 
-    private List<SearchField> searchField;
+    private List<SearchField> field;
     private List<SearchOrder> order;
     private String indexName;
     private List<String> indexType;
-    private Integer pageNo = 1;
-    private Integer pageSize = 10;
+    private Integer pageNo = SearchConstants.SEARCH_PAGE_NO;
+    private Integer pageSize = SearchConstants.SEARCH_PAGE_SIZE;
 
-    public List<SearchField> getSearchField() {
-        return searchField;
+    public List<SearchField> getField() {
+        return field;
     }
 
-    public void setSearchField(List<SearchField> searchField) {
-        this.searchField = searchField;
+    public void setField(List<SearchField> field) {
+        this.field = field;
     }
 
     public List<SearchOrder> getOrder() {
@@ -67,10 +70,28 @@ public class SearchRequest implements Serializable {
         this.indexType = indexType;
     }
 
+    public void setOneIndexType(String indexType) {
+        this.indexType = new ArrayList<String>() {{
+            add(indexType);
+        }};
+    }
+
+    public void setOneOrder(SearchOrder order) {
+        this.order = new ArrayList<SearchOrder>() {{
+            add(order);
+        }};
+    }
+
+    public void setOneField(SearchField field) {
+        this.field = new ArrayList<SearchField>() {{
+            add(field);
+        }};
+    }
+
     @Override
     public String toString() {
         return "SearchRequest{" +
-                "searchField=" + searchField +
+                "field=" + field +
                 ", order=" + order +
                 ", indexName='" + indexName + '\'' +
                 ", indexType='" + indexType + '\'' +

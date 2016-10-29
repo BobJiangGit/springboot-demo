@@ -11,6 +11,7 @@ import io.searchbox.client.config.HttpClientConfig;
 public enum ClientComponent {
 
     INSTANCE;
+
     private SearchProp searchProp;
     private JestClient jestClient;
 
@@ -28,7 +29,7 @@ public enum ClientComponent {
         return jestClient;
     }
 
-    public void closeJestClient(){
+    public void closeJestClient() {
         if (jestClient != null) {
             jestClient.shutdownClient();
             jestClient = null;

@@ -1,6 +1,7 @@
 package com.bob.springboot.simple.controller;
 
 import com.bob.springboot.simple.model.City;
+import com.bob.springboot.simple.model.response.ResultResponse;
 import com.bob.springboot.simple.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,8 +30,13 @@ public class CityController {
         return String.format("hello, user %s, haha.", userName);
     }
 
-    @RequestMapping("/findCityList")
-    public List<City> findCityList() {
-        return cityService.findCityList();
+    @RequestMapping("/findList")
+    public ResultResponse<?> findCityList() {
+        try {
+            List<City> list = cityService.findCityList();
+            return ResultResponse.success(list);
+        } catch (Exception e) {
+            return ResultResponse.failed();
+        }
     }
 }

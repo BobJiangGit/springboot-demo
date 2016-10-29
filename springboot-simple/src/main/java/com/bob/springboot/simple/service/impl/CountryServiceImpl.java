@@ -2,6 +2,7 @@ package com.bob.springboot.simple.service.impl;
 
 import com.bob.springboot.search.constants.SearchConstants;
 import com.bob.springboot.search.SearchComponent;
+import com.bob.springboot.search.model.SearchOrder;
 import com.bob.springboot.simple.mapper.CountryMapper;
 import com.bob.springboot.simple.model.Country;
 import com.bob.springboot.search.model.SearchField;
@@ -10,6 +11,7 @@ import com.bob.springboot.simple.service.CountryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,18 +29,11 @@ public class CountryServiceImpl implements CountryService {
         SearchComponent searchComponent = SearchComponent.INSTANCE;
         SearchRequest request = new SearchRequest();
         request.setIndexName(SearchConstants.INDEX_SPRINGBOOT_DEMO);
-        request.setIndexType(new ArrayList<String>(){{
-            add(SearchConstants.INDEX_TYPE_COUNTRY);
-        }});
-        request.setSearchField(new ArrayList<SearchField>(){{
-            Object value = (country != null) ? country.getCountryname() : null;
-            add(new SearchField("countryname", value, true));
-        }});
-//        request.setOrder(new ArrayList<ESOrder>(){{
-//            add(new ESOrder("countryname"));
-//        }});
+        request.setOneIndexType(SearchConstants.INDEX_TYPE_COUNTRY);
+        Object value = country != null ? country.getCountryname() : null;
+        request.setOneField(new SearchField("countryname", value, true));
+        request.setOneOrder(new SearchOrder("countryname"));
         return searchComponent.searchList(request, Country.class);
-//        return null;
     }
 
     @Override

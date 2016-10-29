@@ -21,10 +21,10 @@ public class ApplicationContextUtil {
     }
 
     public static <T> T getBean(Class<T> clazz){
-        return  getContext().getBean(clazz);
+        return getContext().getBean(clazz);
     }
 
     public static Object getBean(String name){
-        return  getContext().getBean(name);
+        return getContext().getBean(name);
     }
 }
