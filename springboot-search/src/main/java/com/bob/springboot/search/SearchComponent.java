@@ -6,7 +6,8 @@ import com.bob.springboot.search.model.SearchOrder;
 import com.bob.springboot.search.model.SearchField;
 import com.bob.springboot.search.model.SearchRequest;
 import com.google.common.collect.Maps;
-import io.searchbox.client.JestClient;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import io.searchbox.client.JestResult;
 import io.searchbox.core.Search;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +15,8 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
@@ -24,6 +27,8 @@ import java.util.Map;
 public enum SearchComponent {
 
     INSTANCE;
+
+    private static final Logger log = LoggerFactory.getLogger(SearchComponent.class);
 
     private ClientComponent clientComponent = ClientComponent.INSTANCE;
 
@@ -36,21 +41,23 @@ public enum SearchComponent {
     }
 
     public JestResult search(SearchRequest request) {
-        SearchSourceBuilder searchSourceBuilder = buildSearchBuilder(request);
-        Integer from = (request.getPageNo() - 1) * request.getPageSize();
-        Search search = getSearch(searchSourceBuilder, request.getIndexName(),
-                request.getIndexType(), from, request.getPageSize());
-        return executeSearch(search);
-    }
-
-    public JestResult executeSearch(Search search) {
         try {
-            JestClient jestClient = clientComponent.getJestClient();
-            JestResult result = jestClient.execute(search);
-            return result;
+            Gson gson = new Gson();
+
+            SearchSourceBuilder searchSourceBuilder = buildSearchBuilder(request);
+            Integer from = (request.getPageNo() - 1) * request.getPageSize();
+            Search search = getSearch(searchSourceBuilder, request.getIndexName(),
+                    request.getIndexType(), from, request.getPageSize());
+            log.info("search :" + gson.toJson(search));
+            log.info("searchSourceBuilder :" + gson.toJson(searchSourceBuilder));
+            JestResult result = clientComponent.execute(search);
+            if (result != null && result.isSucceeded()) {
+                log.info("result:" + result.getJsonString());
+                return result;
+            }
+            return null;
         } catch (Exception e) {
-            throw new RuntimeException("SearchComponent search failed! msg: "
-                    + e.getMessage(), e);
+            throw new RuntimeException("search failed! " + e.getMessage(), e);
         }
     }
 

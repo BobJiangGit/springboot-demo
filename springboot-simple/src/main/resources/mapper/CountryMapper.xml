@@ -3,13 +3,18 @@
 <mapper namespace="com.bob.springboot.simple.mapper.CountryMapper">
 
     <insert id="save" useGeneratedKeys="true" keyProperty="id" parameterType="com.bob.springboot.simple.model.Country">
-        insert into country (countryname, countrycode) values (#{countryname}, #{countrycode})
+        insert into country (countryname, countrycode) values (#{countryName}, #{countryCode})
     </insert>
 
-    <insert id="update" parameterType="com.bob.springboot.simple.model.Country">
+    <update id="update" parameterType="com.bob.springboot.simple.model.Country">
         update country set
-        countryname = #{countryname},
-        countrycode = #{countrycode}
+        countryname = #{countryName},
+        countrycode = #{countryCode}
         where id = #{id}
-    </insert>
+    </update>
+
+    <select id="findAll" parameterType="com.bob.springboot.simple.model.Country" resultType="com.bob.springboot.simple.model.Country">
+        select id, countryname as countryName, countrycode as countryCode from country
+    </select>
+
 </mapper>

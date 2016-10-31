@@ -32,22 +32,31 @@ public class Country extends BaseModel implements Serializable {
 
     private static final long serialVersionUID = -8002375324554785604L;
 
-    private String countryname;
-    private String countrycode;
+    private String countryName;
+    private String countryCode;
 
-    public String getCountrycode() {
-        return countrycode;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setCountrycode(String countrycode) {
-        this.countrycode = countrycode;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
     }
 
-    public String getCountryname() {
-        return countryname;
+    public String getCountryCode() {
+        return countryCode;
     }
 
-    public void setCountryname(String countryname) {
-        this.countryname = countryname;
+    public void setCountryCode(String countryCode) {
+        this.countryCode = countryCode;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                ", id='" + getId() + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", countryCode='" + countryCode + '\'' +
+                '}';
     }
 }

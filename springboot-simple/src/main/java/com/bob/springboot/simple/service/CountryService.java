@@ -9,9 +9,13 @@ import java.util.List;
  */
 public interface CountryService {
 
-    List<Country> searchCountryList(Country country);
+    List<Country> searchCountryList(Country country, Integer pageNo, Integer pageSize);
+
+    void initCountryIndex();
 
     Integer updateCountry(Country country);
 
     Integer saveCountry(Country country);
+
+    List<Country> findAll(Country country);
 }

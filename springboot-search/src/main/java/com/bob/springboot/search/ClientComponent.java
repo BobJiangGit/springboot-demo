@@ -1,9 +1,13 @@
 package com.bob.springboot.search;
 
 import com.bob.springboot.search.prop.SearchProp;
+import io.searchbox.action.Action;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestClientFactory;
+import io.searchbox.client.JestResult;
 import io.searchbox.client.config.HttpClientConfig;
+
+import java.io.IOException;
 
 /**
  * Created by Bob Jiang on 2016/10/28.
@@ -27,6 +31,11 @@ public enum ClientComponent {
             jestClient = factory.getObject();
         }
         return jestClient;
+    }
+
+    public JestResult execute(Action action) throws IOException {
+        jestClient = getJestClient();
+        return jestClient.execute(action);
     }
 
     public void closeJestClient() {

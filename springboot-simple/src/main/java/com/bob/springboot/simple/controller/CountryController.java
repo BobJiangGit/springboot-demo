@@ -24,13 +24,25 @@ public class CountryController {
     private CountryService countryService;
 
     @RequestMapping("/search")
-    public ResultResponse<?> search(Country country) {
+    public ResultResponse<?> search(Country country, Integer pageNo, Integer pageSize) {
         try {
-            List<Country> list = countryService.searchCountryList(country);
+            List<Country> list = countryService.searchCountryList(country, pageNo, pageSize);
             return ResultResponse.success(list);
         } catch (Exception e) {
             log.error("search failed!", e);
             return ResultResponse.failed("search failed!");
         }
     }
+
+    @RequestMapping("/initIndex")
+    public ResultResponse<?> initIndex(Country country) {
+        try {
+            countryService.initCountryIndex();
+            return ResultResponse.success();
+        } catch (Exception e) {
+            log.error("init Index failed!", e);
+            return ResultResponse.failed("init Index failed!");
+        }
+    }
+
 }

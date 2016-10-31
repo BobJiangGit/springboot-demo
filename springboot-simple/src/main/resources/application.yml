@@ -42,4 +42,4 @@ esServer:
     readTimeout: 30000
     connTimeout: 30000
     hosts:
-        - 127.0.0.1:9200
+        - http://127.0.0.1:9200
