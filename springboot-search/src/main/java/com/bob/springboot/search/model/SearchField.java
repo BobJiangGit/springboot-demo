@@ -1,17 +1,25 @@
 package com.bob.springboot.search.model;
 
 import com.bob.springboot.search.enums.Clause;
+import com.bob.springboot.search.enums.QueryType;
 
 /**
+ * 当QueryType为multi_match时，可定义多个fieldName，以逗号分隔，
+ * 当QueryType为match_all时，fieldName，value会被忽略，匹配所有。
+ *
  * Created by Bob Jiang on 2016/10/27.
  */
 public class SearchField {
 
-    private String fieldName;               //字段名
-    private Object value;                   //字段值
-    private Clause clause = Clause.should;  //搜索条件
-    private Type type = Type.String;        //字段类型
-    private Boolean matchAll = false;       //允许为空查询所有
+    //字段名
+    private String fieldName;
+    //字段值
+    private Object value;
+    //查询方式
+    private QueryType type = QueryType.term;
+    //匹配条件
+    private Clause clause = Clause.should;
+
 
     public SearchField() {}
 
@@ -20,39 +28,14 @@ public class SearchField {
         this.value = value;
     }
 
-    public SearchField(String fieldName, Object value, Boolean matchAll) {
-        this.fieldName = fieldName;
-        this.value = value;
-        this.matchAll = matchAll;
+    public SearchField(String fieldName, Object value, QueryType type) {
+        this(fieldName, value);
+        this.type = type;
     }
 
-    public SearchField(String fieldName, Object value, Clause clause, Type type, Boolean matchAll) {
-        this.fieldName = fieldName;
-        this.value = value;
+    public SearchField(String fieldName, Object value, QueryType type, Clause clause) {
+        this(fieldName, value, type);
         this.clause = clause;
-        this.type = type;
-        this.matchAll = matchAll;
-    }
-
-    public enum Type {
-        Number,
-        String;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public void setType(Type type) {
-        this.type = type;
-    }
-
-    public Boolean getMatchAll() {
-        return matchAll;
-    }
-
-    public void setMatchAll(Boolean matchAll) {
-        this.matchAll = matchAll;
     }
 
     public String getFieldName() {
@@ -71,6 +54,14 @@ public class SearchField {
         this.value = value;
     }
 
+    public QueryType getType() {
+        return type;
+    }
+
+    public void setType(QueryType type) {
+        this.type = type;
+    }
+
     public Clause getClause() {
         return clause;
     }
@@ -84,9 +75,8 @@ public class SearchField {
         return "SearchField{" +
                 "fieldName='" + fieldName + '\'' +
                 ", value=" + value +
-                ", clause=" + clause +
                 ", type=" + type +
-                ", matchAll=" + matchAll +
+                ", clause=" + clause +
                 '}';
     }
 }

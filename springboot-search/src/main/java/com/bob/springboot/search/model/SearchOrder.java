@@ -8,7 +8,7 @@ import org.elasticsearch.search.sort.SortOrder;
 public class SearchOrder {
 
     private String name;
-    private SortOrder sort = SortOrder.DESC;
+    private SortOrder sort = SortOrder.ASC;
 
     public SearchOrder() {}
 
@@ -39,7 +39,7 @@ public class SearchOrder {
 
     @Override
     public String toString() {
-        return "ESOrder{" +
+        return "SearchOrder{" +
                 "name='" + name + '\'' +
                 ", sort=" + sort +
                 '}';

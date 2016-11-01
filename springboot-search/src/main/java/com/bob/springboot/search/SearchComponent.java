@@ -2,6 +2,7 @@ package com.bob.springboot.search;
 
 import com.bob.springboot.search.constants.SearchConstants;
 import com.bob.springboot.search.enums.Clause;
+import com.bob.springboot.search.enums.QueryType;
 import com.bob.springboot.search.model.SearchOrder;
 import com.bob.springboot.search.model.SearchField;
 import com.bob.springboot.search.model.SearchRequest;
@@ -15,6 +16,7 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.highlight.HighlightBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,11 +50,10 @@ public enum SearchComponent {
             Integer from = (request.getPageNo() - 1) * request.getPageSize();
             Search search = getSearch(searchSourceBuilder, request.getIndexName(),
                     request.getIndexType(), from, request.getPageSize());
-            log.info("search :" + gson.toJson(search));
-            log.info("searchSourceBuilder :" + gson.toJson(searchSourceBuilder));
+            log.info("search [" + search.getURI() + "]: " + search.getData(gson));
             JestResult result = clientComponent.execute(search);
             if (result != null && result.isSucceeded()) {
-                log.info("result:" + result.getJsonString());
+                log.info("result : " + result.getJsonString());
                 return result;
             }
             return null;
@@ -92,16 +93,42 @@ public enum SearchComponent {
             throw new RuntimeException("searchField can't be null");
         for (SearchField field : fields) {
             QueryBuilder queryBuilder = null;
+
+            if (QueryType.match_all.equals(field.getType()))
+                queryBuilder = QueryBuilders.matchAllQuery();
+
+            if (QueryType.term.equals(field.getType()))
+                queryBuilder = QueryBuilders.termQuery(field.getFieldName(), field.getValue());
+
+            if (QueryType.match.equals(field.getType()))
+                queryBuilder = QueryBuilders.matchQuery(field.getFieldName(), field.getValue());
+
+            if (QueryType.match_phrase.equals(field.getType()))
+                queryBuilder = QueryBuilders.matchPhraseQuery(field.getFieldName(), field.getValue());
+
+            if (QueryType.multi_match.equals(field.getType())) {
+                String names = field.getFieldName();
+                if (names.indexOf(",") > 0)
+                    queryBuilder = QueryBuilders.multiMatchQuery(field.getValue(), names.split(","));
+            }
+
+            if (QueryType.prefix.equals(field.getType())) {
+                String value = field.getValue() != null ? field.getValue().toString() : null;
+                queryBuilder = QueryBuilders.prefixQuery(field.getFieldName(), value);
+            }
+
             if (field.getValue() != null && StringUtils.isNotBlank(field.getValue().toString())) {
-                if (SearchField.Type.String.equals(field.getType())) {
-                    queryBuilder = QueryBuilders.queryStringQuery(field.getValue().toString())
+                String value = field.getValue().toString();
+                if (QueryType.query_string.equals(field.getType()))
+                    queryBuilder = QueryBuilders.queryStringQuery(value)
                             .defaultField(field.getFieldName());
-                } else {
-                    queryBuilder = QueryBuilders.termQuery(field.getFieldName(), field.getValue());
-                }
-            } else
-                if (field.getMatchAll())
-                    queryBuilder = QueryBuilders.matchAllQuery();
+
+                if (QueryType.wildcard.equals(field.getType()))
+                    queryBuilder = QueryBuilders.wildcardQuery(field.getFieldName(), value);
+
+                if (QueryType.regexp.equals(field.getType()))
+                    queryBuilder = QueryBuilders.regexpQuery(field.getFieldName(), value);
+            }
 
             if (Clause.should.equals(field.getClause()))
                 query.should(queryBuilder);
@@ -116,6 +143,15 @@ public enum SearchComponent {
             for (SearchOrder order : orderList) {
                 builder.sort(order.getName(), order.getSort());
             }
+        }
+
+        if (request.getHighlight() != null && request.getHighlight().getHighlight()) {
+            SearchRequest.Highlight highlight = request.getHighlight();
+            HighlightBuilder highlightBuilder = new HighlightBuilder();
+            highlightBuilder.field(highlight.getHighlightFieldName());
+            highlightBuilder.preTags(highlight.getPreTag());
+            highlightBuilder.postTags(highlight.getPostTag());
+            builder.highlight(highlightBuilder);
         }
         return builder.query(query);
     }

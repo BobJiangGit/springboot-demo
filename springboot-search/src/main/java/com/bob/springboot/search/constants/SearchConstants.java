@@ -18,4 +18,10 @@ public class SearchConstants {
     public static final String SEARCH_RESULT_TOTAL = "total";
 
     public static final String SEARCH_RESULT_MAPKEY = "result";
+
+    public static final boolean SEARCH_HIGHLIGHT = false;
+
+    public static final String HIGHLIGHT_PRE_TAG = "<b>";
+
+    public static final String HIGHLIGHT_POST_TAG = "</b>";
 }

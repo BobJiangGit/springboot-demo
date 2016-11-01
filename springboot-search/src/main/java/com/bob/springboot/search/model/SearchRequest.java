@@ -19,6 +19,71 @@ public class SearchRequest implements Serializable {
     private List<String> indexType;
     private Integer pageNo = SearchConstants.SEARCH_PAGE_NO;
     private Integer pageSize = SearchConstants.SEARCH_PAGE_SIZE;
+    private Highlight highlight;
+
+    public class Highlight {
+
+        private boolean highlight = SearchConstants.SEARCH_HIGHLIGHT;
+
+        private String preTag = SearchConstants.HIGHLIGHT_PRE_TAG;
+
+        private String postTag = SearchConstants.HIGHLIGHT_POST_TAG;
+
+        private String highlightFieldName;
+
+        public Highlight() {}
+
+        public Highlight(String highlightFieldName) {
+            this.highlightFieldName = highlightFieldName;
+            this.highlight = true;
+        }
+
+        public Highlight(String highlightFieldName, String preTag, String postTag) {
+            this(highlightFieldName);
+            this.preTag = preTag;
+            this.postTag = postTag;
+        }
+
+        public boolean getHighlight() {
+            return highlight;
+        }
+
+        public void setHighlight(boolean highlight) {
+            this.highlight = highlight;
+        }
+
+        public String getPreTag() {
+            return preTag;
+        }
+
+        public void setPreTag(String preTag) {
+            this.preTag = preTag;
+        }
+
+        public String getPostTag() {
+            return postTag;
+        }
+
+        public void setPostTag(String postTag) {
+            this.postTag = postTag;
+        }
+
+        public String getHighlightFieldName() {
+            return highlightFieldName;
+        }
+
+        public void setHighlightFieldName(String highlightFieldName) {
+            this.highlightFieldName = highlightFieldName;
+        }
+    }
+
+    public Highlight getHighlight() {
+        return highlight;
+    }
+
+    public void setHighlight(Highlight highlight) {
+        this.highlight = highlight;
+    }
 
     public List<SearchField> getField() {
         return field;

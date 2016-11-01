@@ -3,6 +3,7 @@ package com.bob.springboot.simple.service.impl;
 import com.bob.springboot.search.IndexComponent;
 import com.bob.springboot.search.constants.SearchConstants;
 import com.bob.springboot.search.SearchComponent;
+import com.bob.springboot.search.enums.QueryType;
 import com.bob.springboot.search.model.SearchOrder;
 import com.bob.springboot.simple.mapper.CountryMapper;
 import com.bob.springboot.simple.model.Country;
@@ -35,8 +36,16 @@ public class CountryServiceImpl implements CountryService {
         request.setPageNo(pageNo);
         request.setPageSize(pageSize);
         Object value = country != null ? country.getCountryName() : null;
-        request.setOneField(new SearchField("countryName", value, true));
-        request.setOneOrder(new SearchOrder("id", SortOrder.ASC));
+//        request.setField(new ArrayList<SearchField>(){{
+//            if (value != null && !"".equals(value)) {
+//                add(new SearchField("countryName", value, QueryType.query_string));
+//                add(new SearchField("countryName", value, QueryType.prefix));
+//            } else
+//                add(new SearchField("countryName", value, QueryType.match_all));
+//        }});
+        request.setOneField(new SearchField("countryName", value, QueryType.prefix));
+        request.setOneOrder(new SearchOrder("id"));
+        request.setHighlight(request.new Highlight("countryName"));
         return searchComponent.searchList(request, Country.class);
     }
 
