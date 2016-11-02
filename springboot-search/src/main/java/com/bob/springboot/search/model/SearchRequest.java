@@ -17,8 +17,8 @@ public class SearchRequest implements Serializable {
     private List<SearchOrder> order;
     private String indexName;
     private List<String> indexType;
-    private Integer pageNo = SearchConstants.SEARCH_PAGE_NO;
-    private Integer pageSize = SearchConstants.SEARCH_PAGE_SIZE;
+    private Integer pageNo;
+    private Integer pageSize;
     private Highlight highlight;
 
     public class Highlight {
@@ -159,9 +159,10 @@ public class SearchRequest implements Serializable {
                 "field=" + field +
                 ", order=" + order +
                 ", indexName='" + indexName + '\'' +
-                ", indexType='" + indexType + '\'' +
+                ", indexType=" + indexType +
                 ", pageNo=" + pageNo +
                 ", pageSize=" + pageSize +
+                ", highlight=" + highlight +
                 '}';
     }
 }
