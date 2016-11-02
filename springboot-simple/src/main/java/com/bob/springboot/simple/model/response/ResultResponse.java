@@ -5,7 +5,7 @@ import com.bob.springboot.simple.enums.ResponseEnum;
 import java.io.Serializable;
 
 /**
- * Created by Administrator on 2016/10/30.
+ * Created by Bob Jiang on 2016/10/30.
  */
 public class ResultResponse<T> implements Serializable {
 
