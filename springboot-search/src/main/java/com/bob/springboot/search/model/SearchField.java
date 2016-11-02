@@ -3,13 +3,17 @@ package com.bob.springboot.search.model;
 import com.bob.springboot.search.enums.Clause;
 import com.bob.springboot.search.enums.QueryType;
 
+import java.io.Serializable;
+
 /**
  * 当QueryType为multi_match时，可定义多个fieldName，以逗号分隔，
  * 当QueryType为match_all时，fieldName，value会被忽略，匹配所有。
  *
  * Created by Bob Jiang on 2016/10/27.
  */
-public class SearchField {
+public class SearchField implements Serializable {
+
+    private static final long serialVersionUID = 455871115322862858L;
 
     //字段名
     private String fieldName;
@@ -22,6 +26,10 @@ public class SearchField {
 
 
     public SearchField() {}
+
+    public SearchField(QueryType type) {
+        this.type = type;
+    }
 
     public SearchField(String fieldName, Object value) {
         this.fieldName = fieldName;

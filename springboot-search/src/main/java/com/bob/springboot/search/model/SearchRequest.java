@@ -75,6 +75,16 @@ public class SearchRequest implements Serializable {
         public void setHighlightFieldName(String highlightFieldName) {
             this.highlightFieldName = highlightFieldName;
         }
+
+        @Override
+        public String toString() {
+            return "Highlight{" +
+                    "highlight=" + highlight +
+                    ", preTag='" + preTag + '\'' +
+                    ", postTag='" + postTag + '\'' +
+                    ", highlightFieldName='" + highlightFieldName + '\'' +
+                    '}';
+        }
     }
 
     public Highlight getHighlight() {

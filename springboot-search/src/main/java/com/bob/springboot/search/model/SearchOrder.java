@@ -2,10 +2,14 @@ package com.bob.springboot.search.model;
 
 import org.elasticsearch.search.sort.SortOrder;
 
+import java.io.Serializable;
+
 /**
  * Created by Bob Jiang on 2016/10/27.
  */
-public class SearchOrder {
+public class SearchOrder implements Serializable {
+
+    private static final long serialVersionUID = 7074401089729844225L;
 
     private String name;
     private SortOrder sort = SortOrder.ASC;
