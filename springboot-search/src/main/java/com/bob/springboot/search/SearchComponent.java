@@ -73,10 +73,10 @@ public enum SearchComponent {
                 Map map = (Map) result.getValue(SearchConstants.SEARCH_RESULT_KEY_HITS);
                 List<Map> hitsList = (List<Map>) map.get(SearchConstants.SEARCH_RESULT_KEY_HITS);
                 for (Map hit : hitsList) {
-                    String fieldName = request.getHighlight().getHighlightFieldName();
                     Map sourceMap = (Map) hit.get(SearchConstants.SEARCH_RESULT_KEY_SOURCE);
                     Map highMap = (Map) hit.get(SearchConstants.SEARCH_RESULT_KEY_HIGHLIGHT);
                     String value = "";
+                    String fieldName = request.getHighlight().getHighlightFieldName();
                     List valueList = (List) highMap.get(fieldName);
                     for (Object val : valueList)
                         value += val.toString();
