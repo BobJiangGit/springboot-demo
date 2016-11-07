@@ -11,7 +11,9 @@ public class SearchOrder implements Serializable {
 
     private static final long serialVersionUID = 7074401089729844225L;
 
+    //排序字段名称
     private String name;
+    //顺序
     private SortOrder sort = SortOrder.ASC;
 
     public SearchOrder() {}

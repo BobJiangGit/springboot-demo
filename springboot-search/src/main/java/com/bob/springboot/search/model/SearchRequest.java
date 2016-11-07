@@ -7,28 +7,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ *
  * Created by Bob Jiang on 2016/10/27.
  */
 public class SearchRequest implements Serializable {
 
     private static final long serialVersionUID = -1775272965412280972L;
 
+    //搜索字段
     private List<SearchField> field;
+    //排序
     private List<SearchOrder> order;
+    //索引名称
     private String indexName;
+    //索引类型
     private List<String> indexType;
+    //页码
     private Integer pageNo;
+    //每页显示数量
     private Integer pageSize;
+    //高亮
     private Highlight highlight;
 
+    /**
+     * 高亮
+     */
     public class Highlight {
 
+        //是否高亮
         private boolean highlight = SearchConstants.SEARCH_HIGHLIGHT;
-
+        //高亮标签前缀
         private String preTag = SearchConstants.HIGHLIGHT_PRE_TAG;
-
+        //高亮标签后缀
         private String postTag = SearchConstants.HIGHLIGHT_POST_TAG;
-
+        //高亮属性名称
         private String highlightFieldName;
 
         public Highlight() {}

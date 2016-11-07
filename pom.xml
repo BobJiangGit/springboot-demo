@@ -22,6 +22,7 @@
     </properties>
 
     <modules>
+        <module>springboot-util</module>
         <module>springboot-mapper</module>
         <module>springboot-search</module>
         <module>springboot-simple</module>
